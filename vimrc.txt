@@ -1,0 +1,142 @@
+" =========================== VIM Configuration File ===========================
+"  Author     : RUKMI CHAVDA
+"  Purpose    : Personal Vim configuration for efficient coding and editing
+"  Last Edit  : 17-Oct-2025
+" ==============================================================================
+
+" ------------------------------------------------------------------------------
+" BASIC SETTINGS
+" ------------------------------------------------------------------------------
+set nocompatible                " Use modern Vim behavior
+filetype plugin indent on       " Enable file-type plugins, detection & indenting
+syntax on                       " Syntax highlighting
+set encoding=utf-8              " Use UTF-8 encoding
+set history=1000                " Keep 1000 command history entries
+set clipboard=unnamedplus       " Use system clipboard (copy/paste across apps)
+
+" ------------------------------------------------------------------------------
+" APPEARANCE
+" ------------------------------------------------------------------------------
+set number                      " Show absolute line numbers
+"set relativenumber              " Uncomment for relative numbering
+set cursorline                  " Highlight current line
+set showmatch                   " Highlight matching brackets
+set title                       " Show file name in terminal title
+set ruler                       " Show line/column info
+set showcmd                     " Show incomplete command
+set laststatus=2                " Always show status line
+set cmdheight=1                 " Space for command output
+set scrolloff=5                 " Keep 5 lines visible above/below cursor
+set background=dark             " Dark background
+colorscheme slate               " Preferred colorscheme (try: elflord, desert, evening)
+
+" ------------------------------------------------------------------------------
+" INDENTATION & FORMATTING
+" ------------------------------------------------------------------------------
+set tabstop=4                   " Display width of a tab
+set shiftwidth=4                " Indent width
+set expandtab                   " Use spaces instead of tabs
+set autoindent                  " Copy indent from current line
+set smartindent                 " Smart auto-indenting
+set smarttab                    " Tab respects 'shiftwidth' in front of text
+set nowrap                      " Don’t wrap long lines (toggle with :set wrap)
+set linebreak                   " Wrap at word boundaries (useful when wrap on)
+
+" ------------------------------------------------------------------------------
+" SEARCHING
+" ------------------------------------------------------------------------------
+set ignorecase                  " Case-insensitive search
+set smartcase                   " Case-sensitive if pattern has capital letters
+set incsearch                   " Show matches while typing
+set hlsearch                    " Highlight all matches
+set showmatch                   " Highlight matching brackets
+nnoremap <F5> :nohlsearch<CR>   " F5 to clear highlights
+
+" ------------------------------------------------------------------------------
+" KEY MAPPINGS
+" ------------------------------------------------------------------------------
+nnoremap <F2> :w<CR>            " F2 to save
+nnoremap <F3> :q<CR>            " F3 to quit
+nnoremap <F4> :wq<CR>           " F4 to save and quit
+nnoremap <F6> :e!<CR>           " F6 to reload file from disk
+nnoremap <F7> :set number!<CR>  " F7 toggle line numbers
+nnoremap <F8> :set relativenumber!<CR> " F8 toggle relative line numbers
+
+" ------------------------------------------------------------------------------
+" NAVIGATION SHORTCUTS
+" ------------------------------------------------------------------------------
+nnoremap <Space> za             " Space toggles fold
+set wildmenu                    " Enhanced command-line completion
+set wildmode=longest:full,full  " Better tab completion in command mode
+set backspace=indent,eol,start  " Backspace works everywhere
+
+" ------------------------------------------------------------------------------
+" MOUSE SUPPORT & UI
+" ------------------------------------------------------------------------------
+set mouse=a                     " Enable mouse in all modes
+set ttyfast                     " Faster redrawing
+set lazyredraw                  " Don't redraw while executing macros
+set shortmess+=c                " Avoid unnecessary completion messages
+
+" ------------------------------------------------------------------------------
+" BACKUP, SWAP & UNDO SETTINGS
+" ------------------------------------------------------------------------------
+set backup                      " Enable backup files
+set swapfile                    " Enable swap files
+set undofile                    " Persistent undo
+set backupdir=~/.vim/backup//
+set directory=~/.vim/swap//
+set undodir=~/.vim/undo//
+silent! call mkdir('~/.vim/backup', 'p')
+silent! call mkdir('~/.vim/swap', 'p')
+silent! call mkdir('~/.vim/undo', 'p')
+
+" ------------------------------------------------------------------------------
+" SPELL CHECK (optional)
+" ------------------------------------------------------------------------------
+"set spell                       " Enable spell checking
+"set spelllang=en_us             " English US dictionary
+
+" ------------------------------------------------------------------------------
+" QUALITY OF LIFE IMPROVEMENTS
+" ------------------------------------------------------------------------------
+set confirm                     " Ask confirmation instead of erroring
+set autoread                    " Auto reload files if changed outside Vim
+set hidden                      " Allow unsaved buffers in background
+set updatetime=300               " Faster auto-complete & cursor hold
+set signcolumn=yes              " Always show sign column (for linting, git, etc.)
+set modeline                    " Allow per-file modelines
+set visualbell                  " No beeps
+set noerrorbells                " Disable terminal bell sounds
+
+" ------------------------------------------------------------------------------
+" PLUGINS (Optional, managed via vim-plug)
+" ------------------------------------------------------------------------------
+" call plug#begin('~/.vim/plugged')
+" Plug 'vim-airline/vim-airline'          " Status bar enhancement
+" Plug 'preservim/nerdtree'               " File tree
+" Plug 'junegunn/fzf.vim'                 " Fuzzy file finder
+" Plug 'tpope/vim-commentary'             " Easy commenting
+" Plug 'jiangmiao/auto-pairs'             " Auto bracket pairs
+" Plug 'morhetz/gruvbox'                  " Popular colorscheme
+" call plug#end()
+
+" ------------------------------------------------------------------------------
+" FILETYPE-SPECIFIC SETTINGS
+" ------------------------------------------------------------------------------
+augroup filetype_specific
+  autocmd!
+  autocmd FileType python setlocal tabstop=4 shiftwidth=4 expandtab
+  autocmd FileType make setlocal noexpandtab
+  autocmd FileType tcl,sh setlocal tabstop=4 shiftwidth=4 expandtab
+  autocmd FileType verilog,vhdl setlocal tabstop=2 shiftwidth=2 expandtab
+augroup END
+
+" ------------------------------------------------------------------------------
+" CUSTOM STATUS LINE (if not using vim-airline)
+" ------------------------------------------------------------------------------
+set statusline=%f%m%r%h%w\ [%{&ff}]\ [%Y]\ [line:%l/%L,col:%c]\ [%p%%]
+
+" ------------------------------------------------------------------------------
+" END OF FILE
+" ------------------------------------------------------------------------------
