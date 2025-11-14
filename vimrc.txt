@@ -1,7 +1,5 @@
 " =========================== VIM Configuration File ===========================
 "  Author     : RUKMI CHAVDA
-"  Purpose    : Personal Vim configuration for efficient coding and editing
-"  Last Edit  : 17-Oct-2025
 " ==============================================================================
 
 " ------------------------------------------------------------------------------
@@ -18,8 +16,9 @@ set clipboard=unnamedplus       " Use system clipboard (copy/paste across apps)
 " APPEARANCE
 " ------------------------------------------------------------------------------
 set number                      " Show absolute line numbers
-"set relativenumber              " Uncomment for relative numbering
+set relativenumber              " Uncomment for relative numbering
 set cursorline                  " Highlight current line
+set cursorcolumn                " Highlight current column
 set showmatch                   " Highlight matching brackets
 set title                       " Show file name in terminal title
 set ruler                       " Show line/column info
@@ -28,7 +27,7 @@ set laststatus=2                " Always show status line
 set cmdheight=1                 " Space for command output
 set scrolloff=5                 " Keep 5 lines visible above/below cursor
 set background=dark             " Dark background
-colorscheme slate               " Preferred colorscheme (try: elflord, desert, evening)
+colorscheme  desert              " Preferred colorscheme (try: elflord, desert, evening)
 
 " ------------------------------------------------------------------------------
 " INDENTATION & FORMATTING
