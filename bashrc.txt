@@ -52,7 +52,7 @@ alias cl='clear && ls'
 # FILE MANAGEMENT
 # ============================================================
 
-alias ll='ls -alFhrt --group-directories-first'
+alias ll='ls -lFhrt --group-directories-first'
 alias la='ls -A'
 alias l='ls -CF'
 alias cp='cp -iv'
@@ -148,7 +148,119 @@ extract() {
     esac
 }
 
+# Create Vim backup, swap, undo directories
+create_vim_dirs() {
+    local base="$HOME/.vim"
+    local dirs=("backup" "swap" "undo")
+
+    for d in "${dirs[@]}"; do
+        if [[ -d "$base/$d" ]]; then
+            echo "[OK] Exists: $base/$d"
+        else
+            mkdir -p "$base/$d"
+            echo "[CREATED] $base/$d"
+        fi
+    done
+}
+
+
+# HISTOGRAM		
+histogram () {
+    arg1=$1
+    arg2=$2
+    arg3=$3
+    arg4=$4
+    arg5=$5
+    tclsh <<EOF
+    source /project/pd/crukmi/Work/sf4llp_work_u_series/scripts/my/histogram.tcl
+    histogram "$arg1" "$arg2" "$arg3" "$arg4" "$arg5"
+EOF
+}
+
+
+# CELLS SUMMARY		
+cells () {
+    arg1=$1
+    arg2=$2
+    arg3=$3
+    arg4=$4
+    tclsh <<EOF
+    source /project/pd/crukmi/Work/sf4llp_work_u_series/scripts/my/cellInfo.tcl
+    cells "$arg1" "$arg2" "$arg3" "$arg4"
+EOF
+}
+
+
+# RUN TIME SUMMARY 		
+runtime () {
+    tclsh /project/pd/crukmi/Work/sf4llp_work_u_series/scripts/summary/runtimeSummary.tcl
+}
+
+# UTILIZATION SUMMARY 		
+utilization () {
+    tclsh /project/pd/crukmi/Work/sf4llp_work_u_series/scripts/summary/utilizationSummary.tcl
+}
+
+# CONGESTION SUMMARY 		
+congestion () {
+    tclsh /project/pd/crukmi/Work/sf4llp_work_u_series/scripts/summary/congestionSummary.tcl
+}
+
+# PATH GROUP SUMMARY
+pg() {
+    local pattern="Path Group:"   # First argument: search pattern
+    local file=$1      # Second argument: file to search in
+
+    if [ -f "$file" ]; then
+        echo "Searching for '$pattern' in $file..."
+        grep "$pattern" "$file" | awk '{printf $3 "\n"}' | sort | uniq -c | sort -n 
+    else
+        echo "File $file not found!"
+    fi
+}
+
+# STARTPOINT SUMMARY
+sp() {
+    local pattern="Startpoint"   # First argument: search pattern
+    local file=$1      # Second argument: file to search in
+
+    if [ -f "$file" ]; then
+        echo "Searching for '$pattern' in $file..."
+        grep "$pattern" "$file" | sort | awk '{printf $2 "\n"}' | uniq -c | sort -n 
+    else
+        echo "File $file not found!"
+    fi
+}
+
+
+# ENDPOINT SUMMARY
+ep() {
+    local pattern="Endpoint"   # First argument: search pattern
+    local file=$1      # Second argument: file to search in
+
+    if [ -f "$file" ]; then
+        echo "Searching for '$pattern' in $file..."
+        grep "$pattern" "$file" | sort | awk '{printf $2 "\n"}' | uniq -c | sort -n 
+    else
+        echo "File $file not found!"
+    fi
+}
+
+
+# log
+log () {
+    arg1=$1
+    arg2=$2
+    tclsh <<EOF
+    source /project/pd/crukmi/Work/sf4llp_work_u_series/scripts/summary/logSummary.tcl
+    log_summary "$arg1" "$arg2"
+EOF
+}
+
+
+
+
+
 # ============================================================
 # END OF FILE
 # ============================================================
-
