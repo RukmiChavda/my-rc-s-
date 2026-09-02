@@ -1,17 +1,5 @@
 #############################################################################
-# ~/.cshrc  (tcsh)
-# Converted from a bash VLSI-flow .bashrc.
-#
-# NOTE ON APPROACH:
-# tcsh has no real functions/local vars/if-then-else *inside* a single
-# alias definition the way bash does. For the handful of bash "functions"
-# below that need real logic (optional args, loops, case statements), the
-# tcsh alias just shells out to bash with the original logic embedded,
-# e.g.:
-#     alias foo 'bash -c '"'"'...bash code using "$@"...'"'"' foo \!*'
-# This keeps behavior identical to the bash version instead of a lossy
-# re-implementation in pure csh syntax. Pure aliases are used everywhere
-# a straight one-liner suffices.
+# ~/.cshrc  (tcsh) RUKMI
 #############################################################################
 
 # ---------------------------------------------------------------------------
@@ -67,7 +55,7 @@ setenv LESS        "-R -M -i -j5"                 # nicer less: colors, line#, s
 
 mkdir -p "$SCRATCH" >& /dev/null
 
-# Lmod / environment modules (uncomment / adjust to your site's module system)
+# Lmod / environment modules (uncomment/adjust to your site's module system)
 # setenv MODULEPATH "${EDA_ROOT}/modulefiles:${MODULEPATH}"
 # source /usr/share/lmod/lmod/init/tcsh
 
@@ -113,28 +101,7 @@ alias timingsum 'grep -inE "wns|tns|nvp|worst negative slack|total negative slac
 alias viocount 'grep -icE "violat"'
 
 # ---------------------------------------------------------------------------
-# 7. Job scheduler helpers (LSF / SGE / SLURM) — uncomment what your site uses
-# ---------------------------------------------------------------------------
-# --- LSF ---
-alias bj  'bjobs -w'
-alias bjm 'bjobs -w -u all'
-alias bpk 'bpeek'
-alias bkillmine 'bash -c '"'"'bjobs -o "JOBID" -noheader | xargs -r bkill'"'"' bkillmine'
-
-# --- SGE ---
-# alias qj  'qstat -u $USER'
-# alias qjm 'qstat -u "*"'
-
-# --- SLURM ---
-# alias sj  'squeue -u $USER'
-# alias sjm 'squeue'
-# alias scancelmine 'scancel -u $USER'
-
-# generic job watcher — refreshes every 5s
-alias watchjobs 'watch -n 5 "bjobs -w >& /dev/null || qstat -u $USER >& /dev/null || squeue -u $USER"'
-
-# ---------------------------------------------------------------------------
-# 8. TCL / EDA tool shortcuts
+# 7. TCL / EDA tool shortcuts
 # ---------------------------------------------------------------------------
 alias tcls 'tclsh'
 alias vims 'vim -c "syntax on" -c "set ft=tcl"'   # open a file with TCL syntax highlighting forced
@@ -149,7 +116,7 @@ alias finddef 'find . -iname "*.def*"'
 alias findlef 'find . -iname "*.lef*"'
 
 # ---------------------------------------------------------------------------
-# 9. Git shortcuts (flow scripts / config repos)
+# 8. Git shortcuts (flow scripts / config repos)
 # ---------------------------------------------------------------------------
 alias gs  'git status'
 alias gd  'git diff'
@@ -160,22 +127,26 @@ alias gp  'git push'
 alias gco 'git checkout'
 
 # ---------------------------------------------------------------------------
-# 10. General QoL aliases
+# 9. General QoL aliases
 # ---------------------------------------------------------------------------
-alias ll   'ls -alFh --color=auto'
+alias ll   'ls -lrth --color=auto'
 alias la   'ls -A --color=auto'
 alias l    'ls -CF --color=auto'
 alias grep 'grep --color=auto'
 alias ..   'cd ..'
-alias ...  'cd ../..'
-alias .... 'cd ../../..'
+alias ..2  'cd ../..'
+alias ..3 'cd ../../..'
+alias ..4 'cd ../../../..'
+alias ..5 'cd ../../../../..'
+alias ..6 'cd ../../../../../..'
+alias ..7 'cd ../../../../../../..'
 alias df   'df -h'
 alias du   'du -h'
 alias free 'free -h'
 alias path 'echo $PATH:q | tr ":" "\n"'
 alias reload 'source ~/.cshrc && echo "cshrc reloaded"'
 alias now  'date "+%Y-%m-%d %H:%M:%S"'
-
+alias rp 'realpath'
 # du of run directories sorted by size, top offenders first
 alias dusort 'bash -c '"'"'du -h --max-depth=1 "${1:-.}" 2>/dev/null | sort -hr'"'"' dusort \!*'
 
@@ -208,19 +179,58 @@ alias extract 'bash -c '"'"'\
     fi \
     '"'"' extract \!*'
 
+# Create Vim backup, swap, undo directories
+alias create_vim_dirs '\
+    set _base = "$HOME/.vim" ; \
+    foreach _d ( backup swap undo ) \
+        if ( -d "${_base}/${_d}" ) then \
+            echo "[OK] Exists: ${_base}/${_d}" \
+        else \
+            mkdir -p "${_base}/${_d}" \
+            echo "[CREATED] ${_base}/${_d}" \
+        endif \
+    end \
+'
 # ---------------------------------------------------------------------------
-# 11. Safety nets
+# 10. Safety nets
 # ---------------------------------------------------------------------------
 alias rm 'rm -i'
 alias cp 'cp -i'
 alias mv 'mv -i'
 
 # ---------------------------------------------------------------------------
-# 12. Local overrides — keep machine-specific / secret config out of git
+# 11. Local overrides — keep machine-specific / secret config out of git
 # ---------------------------------------------------------------------------
 if (-f "$HOME/.cshrc.local") then
     source "$HOME/.cshrc.local"
 endif
+
+# ---------------------------------------------------------------------------
+# 12. Vim / GVim helpers
+# ---------------------------------------------------------------------------
+
+# Open GUI vim in background
+alias g 'gvim \!* &'
+alias v 'vim'
+
+# GVim, but fall back to terminal vim if no DISPLAY
+alias gvim 'bash -c '"'"'\
+    if [ -n "$DISPLAY" ]; then \
+        gvim "$@" & \
+    else \
+        vim "$@" ; \
+    fi \
+    '"'"' gvim \!*'
+
+# Read-only view
+alias vv 'vim -R \!*'
+
+# Diff two files/reports side by side
+alias vd 'vimdiff \!*'
+alias gvd 'gvimdiff \!* &'
+
+# Open in a new tab per file instead of separate buffers
+alias vt 'vim -p \!*'
 
 #############################################################################
 # End of .cshrc
